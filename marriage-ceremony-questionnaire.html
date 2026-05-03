@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <title>Marriage Ceremony Planning Questionnaire</title>
+  <style>
+    :root {
+      --bg: #faf8f5;
+      --surface: #ffffff;
+      --text: #1c1917;
+      --muted: #57534e;
+      --accent: #9d6b53;
+      --accent-soft: rgba(157, 107, 83, 0.12);
+      --border: #e7e5e4;
+      --ring: #9d6b53;
+      --success: #4d7c5c;
+      --shadow: 0 1px 3px rgba(28, 25, 23, 0.06), 0 8px 24px rgba(28, 25, 23, 0.06);
+      --radius: 14px;
+      --font: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #141211;
+        --surface: #1c1917;
+        --text: #fafaf9;
+        --muted: #a8a29e;
+        --accent: #c4a484;
+        --accent-soft: rgba(196, 164, 132, 0.15);
+        --border: #292524;
+        --ring: #d4b896;
+        --shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 8px 28px rgba(0, 0, 0, 0.35);
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      font-family: var(--font-ui);
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse 120% 80% at 50% -20%, var(--accent-soft), transparent 50%),
+        var(--bg);
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    .wrap {
+      max-width: 42rem;
+      margin: 0 auto;
+      padding: 1.25rem 1rem 4rem;
+    }
+
+    header.hero {
+      text-align: center;
+      padding: 1.5rem 0 2rem;
+    }
+
+    header.hero h1 {
+      font-family: var(--font);
+      font-size: clamp(1.5rem, 4vw, 1.85rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.5rem;
+      line-height: 1.2;
+    }
+
+    header.hero .subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 28rem;
+      margin: 0 auto 1rem;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .toolbar button {
+      font-family: var(--font-ui);
+      font-size: 0.875rem;
+      padding: 0.65rem 1rem;
+      min-height: 44px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: transform 0.15s, border-color 0.15s;
+    }
+
+    .toolbar button:hover {
+      border-color: var(--accent);
+    }
+
+    .toolbar button:active {
+      transform: scale(0.98);
+    }
+
+    .toolbar button.primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .toolbar button.primary { color: #1c1917; }
+    }
+
+    .save-hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-align: center;
+      min-height: 1.25rem;
+    }
+
+    .save-hint.saved { color: var(--success); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.15rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2 {
+      font-family: var(--font);
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin: 0 0 0.75rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .card h2 .num {
+      font-family: var(--font-ui);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .field-row {
+      display: grid;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (min-width: 540px) {
+      .field-row.two-col {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    label.field-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      font-family: var(--font-ui);
+      font-size: 1rem;
+      padding: 0.75rem 0.85rem;
+      min-height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    textarea {
+      min-height: 5rem;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--ring);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+
+    .opts {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .opts.grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.4rem;
+    }
+
+    @media (min-width: 480px) {
+      .opts.grid.two-col {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .opt {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      padding: 0.55rem 0.6rem;
+      border-radius: 10px;
+      cursor: pointer;
+      min-height: 44px;
+      border: 1px solid transparent;
+      transition: background 0.12s, border-color 0.12s;
+    }
+
+    .opt:hover {
+      background: var(--accent-soft);
+    }
+
+    .opt input {
+      width: 1.15rem;
+      height: 1.15rem;
+      margin-top: 0.2rem;
+      accent-color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .opt span {
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+
+    .textarea-block {
+      margin-top: 0.75rem;
+    }
+
+    footer.note {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+      padding: 2rem 0 1rem;
+    }
+
+    nav.toc {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      margin: 0 -1rem 1rem;
+      padding: 0.6rem 1rem;
+    }
+
+    nav.toc select {
+      width: 100%;
+      max-width: 100%;
+      font-size: 1rem;
+      padding: 0.65rem 0.85rem;
+      min-height: 44px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="toc" aria-label="Jump to section">
+      <select id="section-jump" aria-label="Go to section">
+        <option value="">Jump to section…</option>
+        <option value="meta">Couple &amp; details</option>
+        <option value="s1">1 · Overall feel</option>
+        <option value="s2">2 · Legal marriage wording</option>
+        <option value="s3">3 · Length</option>
+        <option value="s4">4 · Parts to include</option>
+        <option value="s5">5 · Parts to avoid</option>
+        <option value="s6">6 · Vows</option>
+        <option value="s7">7 · Rings</option>
+        <option value="s8">8 · Family</option>
+        <option value="s9">9 · Absent loved ones</option>
+        <option value="s10">10 · Their story</option>
+        <option value="s11">11 · Humour</option>
+        <option value="s12">12 · Faith &amp; blessing</option>
+        <option value="s13">13 · Entry &amp; music</option>
+        <option value="s14">14 · Final words</option>
+        <option value="s15">15 · Final checklist</option>
+      </select>
+    </nav>
+
+    <header class="hero">
+      <h1>Marriage Ceremony Planning Questionnaire</h1>
+      <p class="subtitle">For a celebration ceremony after the legal marriage has already taken place. Your answers are stored only in this browser (local storage)—nothing is sent online.</p>
+      <div class="toolbar">
+        <button type="button" class="primary" id="btn-save-now">Save now</button>
+        <button type="button" id="btn-export">Copy backup</button>
+        <button type="button" id="btn-clear">Clear all</button>
+      </div>
+      <p class="save-hint" id="save-status" role="status"></p>
+    </header>
+
+    <form id="q-form" autocomplete="on">
+      <section class="card" id="meta">
+        <h2><span class="num">Details</span> Couple &amp; ceremony</h2>
+        <div class="field-row two-col">
+          <div>
+            <label class="field-label" for="couple">Couple</label>
+            <input type="text" id="couple" name="couple" placeholder="Names">
+          </div>
+          <div>
+            <label class="field-label" for="ceremony-date">Ceremony date</label>
+            <input type="text" id="ceremony-date" name="ceremony_date" placeholder="e.g. 15 June 2026">
+          </div>
+          <div>
+            <label class="field-label" for="venue">Venue</label>
+            <input type="text" id="venue" name="venue" placeholder="Venue name or location">
+          </div>
+          <div>
+            <label class="field-label" for="officiant">Officiant</label>
+            <input type="text" id="officiant" name="officiant" placeholder="Celebrant name">
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="s1">
+        <h2><span class="num">1</span> Overall feel</h2>
+        <p class="subtitle" style="margin:-0.25rem 0 0.75rem;font-size:0.9rem;color:var(--muted)">Choose any that fit (you can pick several).</p>
+        <div class="opts grid two-col" data-checkbox-group="feel">
+          <label class="opt"><input type="checkbox" name="feel" value="warm_relaxed"><span>Warm and relaxed</span></label>
+          <label class="opt"><input type="checkbox" name="feel" value="elegant_formal"><span>Elegant and formal</span></label>
+          <label class="opt"><input type="checkbox" name="feel" value="funny_light"><span>Funny and light</span></label>
+          <label class="opt"><input type="checkbox" name="feel" value="emotional"><span>Emotional and heartfelt</span></label>
+          <label class="opt"><input type="checkbox" name="feel" value="short_simple"><span>Short and simple</span></label>
+          <label class="opt"><input type="checkbox" name="feel" value="spiritual"><span>Spiritual / faith-based</span></label>
+          <label class="opt"><input type="checkbox" name="feel" value="traditional"><span>Traditional</span></label>
+          <label class="opt"><input type="checkbox" name="feel" value="modern_casual"><span>Modern and casual</span></label>
+          <label class="opt"><input type="checkbox" name="feel" value="family_focused"><span>Family-focused</span></label>
+          <label class="opt"><input type="checkbox" name="feel" value="mix_humour_emotion"><span>A mix of humour and emotion</span></label>
+        </div>
+        <div class="textarea-block">
+          <label class="field-label" for="feel-words">Words they would use to describe the ceremony</label>
+          <textarea id="feel-words" name="feel_words" rows="3" placeholder="Adjectives, vibe, inspiration…"></textarea>
+        </div>
+      </section>
+
+      <section class="card" id="s2">
+        <h2><span class="num">2</span> Legal marriage wording</h2>
+        <p class="subtitle" style="margin:-0.25rem 0 0.75rem;font-size:0.9rem;color:var(--muted)">Since the legal marriage has already happened, how openly should this be handled?</p>
+        <div class="opts" data-radio-group="legal">
+          <label class="opt"><input type="radio" name="legal" value="tell_clearly"><span>Tell guests clearly that we are already legally married</span></label>
+          <label class="opt"><input type="radio" name="legal" value="mention_gently"><span>Mention it gently without making a big deal of it</span></label>
+          <label class="opt"><input type="radio" name="legal" value="do_not_mention"><span>Do not mention it at all</span></label>
+          <label class="opt"><input type="radio" name="legal" value="not_sure"><span>Not sure – help us choose the wording</span></label>
+        </div>
+        <div class="textarea-block">
+          <label class="field-label" for="legal-notes">Preferred wording or concerns</label>
+          <textarea id="legal-notes" name="legal_notes" rows="3"></textarea>
+        </div>
+      </section>
+
+      <section class="card" id="s3">
+        <h2><span class="num">3</span> Length of ceremony</h2>
+        <div class="opts" data-radio-group="length">
+          <label class="opt"><input type="radio" name="length" value="very_short"><span>Very short: 5–8 minutes</span></label>
+          <label class="opt"><input type="radio" name="length" value="short"><span>Short: 10–12 minutes</span></label>
+          <label class="opt"><input type="radio" name="length" value="standard"><span>Standard: 12–20 minutes</span></label>
+          <label class="opt"><input type="radio" name="length" value="longer"><span>Longer and more detailed: 20+ minutes</span></label>
+          <label class="opt"><input type="radio" name="length" value="unsure"><span>Unsure</span></label>
+        </div>
+        <div class="textarea-block">
+          <label class="field-label" for="timing-notes">Timing notes</label>
+          <textarea id="timing-notes" name="timing_notes" rows="2"></textarea>
+        </div>
+      </section>
+
+      <section class="card" id="s4">
+        <h2><span class="num">4</span> Ceremony parts to include</h2>
+        <div class="opts grid two-col" data-checkbox-group="include">
+          <label class="opt"><input type="checkbox" name="include" value="welcome"><span>Welcome</span></label>
+          <label class="opt"><input type="checkbox" name="include" value="ack_country"><span>Acknowledgement of Country</span></label>
+          <label class="opt"><input type="checkbox" name="include" value="how_met"><span>Short story of how we met</span></label>
+          <label class="opt"><input type="checkbox" name="include" value="love_about"><span>What we love about each other</span></label>
+          <label class="opt"><input type="checkbox" name="include" value="personal_vows"><span>Personal vows</span></label>
+          <label class="opt"><input type="checkbox" name="include" value="repeat_vows"><span>Repeat-after-me vows</span></label>
+          <label class="opt"><input type="checkbox" name="include" value="i_do"><span>I do / I will promises</span></label>
+          <label class="opt"><input type="checkbox" name="include" value="rings"><span>Ring exchange</span></label>
+          <label class="opt"><input type="checkbox" name="include" value="reading"><span>Reading or poem</span></label>
+          <label class="opt"><input type="checkbox" name="include" value="prayer"><span>Prayer or blessing</span></label>
+          <label class="opt"><input type="checkbox" name="include" value="family_ack"><span>Family acknowledgement</span></label>
+          <label class="opt"><input type="checkbox" name="include" value="absent"><span>Absent loved ones acknowledgement</span></label>
+          <label class="opt"><input type="checkbox" name="include" value="signing"><span>Symbolic signing moment</span></label>
+          <label class="opt"><input type="checkbox" name="include" value="music_moment"><span>Music moment</span></label>
+          <label class="opt"><input type="checkbox" name="include" value="kiss"><span>Kiss</span></label>
+          <label class="opt"><input type="checkbox" name="include" value="final_intro"><span>Final introduction as a married couple</span></label>
+        </div>
+        <div class="textarea-block">
+          <label class="field-label" for="must-have">Must-have moments</label>
+          <textarea id="must-have" name="must_have" rows="3"></textarea>
+        </div>
+      </section>
+
+      <section class="card" id="s5">
+        <h2><span class="num">5</span> Ceremony parts to avoid</h2>
+        <div class="opts grid two-col" data-checkbox-group="avoid">
+          <label class="opt"><input type="checkbox" name="avoid" value="too_formal"><span>Too formal</span></label>
+          <label class="opt"><input type="checkbox" name="avoid" value="too_cheesy"><span>Too cheesy</span></label>
+          <label class="opt"><input type="checkbox" name="avoid" value="too_religious"><span>Too religious</span></label>
+          <label class="opt"><input type="checkbox" name="avoid" value="too_sentimental"><span>Too sentimental</span></label>
+          <label class="opt"><input type="checkbox" name="avoid" value="too_many_jokes"><span>Too many jokes</span></label>
+          <label class="opt"><input type="checkbox" name="avoid" value="long_speeches"><span>Long speeches</span></label>
+          <label class="opt"><input type="checkbox" name="avoid" value="audience_part"><span>Audience participation</span></label>
+          <label class="opt"><input type="checkbox" name="avoid" value="given_away"><span>Being “given away”</span></label>
+          <label class="opt"><input type="checkbox" name="avoid" value="gendered_wording"><span>Traditional gendered wording</span></label>
+          <label class="opt"><input type="checkbox" name="avoid" value="legal_explained"><span>Explaining the legal side too much</span></label>
+        </div>
+        <div class="textarea-block">
+          <label class="field-label" for="avoid-notes">Anything I should absolutely not say, mention or joke about</label>
+          <textarea id="avoid-notes" name="avoid_notes" rows="3"></textarea>
+        </div>
+      </section>
+
+      <section class="card" id="s6">
+        <h2><span class="num">6</span> Vows</h2>
+        <div class="opts" data-radio-group="vows">
+          <label class="opt"><input type="radio" name="vows" value="own"><span>We will write our own vows</span></label>
+          <label class="opt"><input type="radio" name="vows" value="repeat"><span>We want repeat-after-me vows</span></label>
+          <label class="opt"><input type="radio" name="vows" value="i_do_simple"><span>We want simple “I do” vows</span></label>
+          <label class="opt"><input type="radio" name="vows" value="private"><span>We want private vows, not spoken publicly</span></label>
+          <label class="opt"><input type="radio" name="vows" value="no_vows"><span>No vows</span></label>
+          <label class="opt"><input type="radio" name="vows" value="unsure"><span>Unsure</span></label>
+        </div>
+        <div class="textarea-block">
+          <label class="field-label" for="vows-tone">Tone of vows</label>
+          <textarea id="vows-tone" name="vows_tone" rows="2"></textarea>
+        </div>
+      </section>
+
+      <section class="card" id="s7">
+        <h2><span class="num">7</span> Rings</h2>
+        <div class="opts" data-radio-group="rings">
+          <label class="opt"><input type="radio" name="rings" value="exchange"><span>Exchange rings during this ceremony</span></label>
+          <label class="opt"><input type="radio" name="rings" value="already_exchanged"><span>Mention rings already exchanged</span></label>
+          <label class="opt"><input type="radio" name="rings" value="symbolic"><span>Do a symbolic ring moment</span></label>
+          <label class="opt"><input type="radio" name="rings" value="skip"><span>Skip rings completely</span></label>
+          <label class="opt"><input type="radio" name="rings" value="unsure"><span>Unsure</span></label>
+        </div>
+      </section>
+
+      <section class="card" id="s8">
+        <h2><span class="num">8</span> Family and important people</h2>
+        <div class="opts grid two-col" data-checkbox-group="family">
+          <label class="opt"><input type="checkbox" name="family" value="parents"><span>Mention parents</span></label>
+          <label class="opt"><input type="checkbox" name="family" value="grandparents"><span>Mention grandparents</span></label>
+          <label class="opt"><input type="checkbox" name="family" value="siblings"><span>Mention siblings</span></label>
+          <label class="opt"><input type="checkbox" name="family" value="children"><span>Mention children</span></label>
+          <label class="opt"><input type="checkbox" name="family" value="wedding_party"><span>Mention wedding party</span></label>
+          <label class="opt"><input type="checkbox" name="family" value="friends"><span>Mention close friends</span></label>
+          <label class="opt"><input type="checkbox" name="family" value="general"><span>Keep family mentions general</span></label>
+          <label class="opt"><input type="checkbox" name="family" value="avoid_names"><span>Avoid naming particular family members</span></label>
+        </div>
+        <div class="textarea-block">
+          <label class="field-label" for="family-names">Names and relationships to include</label>
+          <textarea id="family-names" name="family_names" rows="4"></textarea>
+        </div>
+      </section>
+
+      <section class="card" id="s9">
+        <h2><span class="num">9</span> Absent loved ones</h2>
+        <div class="opts" data-radio-group="absent">
+          <label class="opt"><input type="radio" name="absent" value="by_name"><span>Mention by name</span></label>
+          <label class="opt"><input type="radio" name="absent" value="generally"><span>Mention generally</span></label>
+          <label class="opt"><input type="radio" name="absent" value="quiet_moment"><span>Have a quiet moment of remembrance</span></label>
+          <label class="opt"><input type="radio" name="absent" value="photo"><span>Use a photo / table / candle</span></label>
+          <label class="opt"><input type="radio" name="absent" value="omit"><span>Do not include this</span></label>
+          <label class="opt"><input type="radio" name="absent" value="unsure"><span>Unsure</span></label>
+        </div>
+        <div class="textarea-block">
+          <label class="field-label" for="absent-notes">Names or wording preferences</label>
+          <textarea id="absent-notes" name="absent_notes" rows="3"></textarea>
+        </div>
+      </section>
+
+      <section class="card" id="s10">
+        <h2><span class="num">10</span> Their story</h2>
+        <div class="field-row">
+          <div>
+            <label class="field-label" for="story-met">How did you meet?</label>
+            <textarea id="story-met" name="story_met" rows="3"></textarea>
+          </div>
+          <div>
+            <label class="field-label" for="story-serious">When did you realise this relationship was serious?</label>
+            <textarea id="story-serious" name="story_serious" rows="3"></textarea>
+          </div>
+          <div>
+            <label class="field-label" for="story-admire">What do you admire most about each other?</label>
+            <textarea id="story-admire" name="story_admire" rows="3"></textarea>
+          </div>
+          <div>
+            <label class="field-label" for="story-funny">What does the other person do that is funny, annoying or lovable?</label>
+            <textarea id="story-funny" name="story_funny" rows="3"></textarea>
+          </div>
+          <div>
+            <label class="field-label" for="story-through">What have you already been through together?</label>
+            <textarea id="story-through" name="story_through" rows="3"></textarea>
+          </div>
+          <div>
+            <label class="field-label" for="story-life">What kind of life are you trying to build?</label>
+            <textarea id="story-life" name="story_life" rows="3"></textarea>
+          </div>
+          <div>
+            <label class="field-label" for="story-marriage-meaning">What does marriage mean to you now?</label>
+            <textarea id="story-marriage-meaning" name="story_marriage_meaning" rows="3"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="s11">
+        <h2><span class="num">11</span> Humour</h2>
+        <div class="opts" data-radio-group="humour">
+          <label class="opt"><input type="radio" name="humour" value="gentle"><span>Yes, gentle humour is welcome</span></label>
+          <label class="opt"><input type="radio" name="humour" value="little"><span>A little bit only</span></label>
+          <label class="opt"><input type="radio" name="humour" value="no_roasting"><span>No roasting</span></label>
+          <label class="opt"><input type="radio" name="humour" value="elegant"><span>Elegant and sincere only</span></label>
+          <label class="opt"><input type="radio" name="humour" value="ask_first"><span>Ask us before using any joke</span></label>
+          <label class="opt"><input type="radio" name="humour" value="unsure"><span>Unsure</span></label>
+        </div>
+        <div class="textarea-block">
+          <label class="field-label" for="humour-notes">Safe jokes / off-limit jokes</label>
+          <textarea id="humour-notes" name="humour_notes" rows="3"></textarea>
+        </div>
+      </section>
+
+      <section class="card" id="s12">
+        <h2><span class="num">12</span> Faith, spirituality or blessing</h2>
+        <div class="opts grid two-col" data-checkbox-group="faith">
+          <label class="opt"><input type="checkbox" name="faith" value="prayer"><span>Include a prayer</span></label>
+          <label class="opt"><input type="checkbox" name="faith" value="bible"><span>Include a Bible reading</span></label>
+          <label class="opt"><input type="checkbox" name="faith" value="blessing"><span>Include a general blessing</span></label>
+          <label class="opt"><input type="checkbox" name="faith" value="god_brief"><span>Mention God briefly</span></label>
+          <label class="opt"><input type="checkbox" name="faith" value="non_religious"><span>Keep it non-religious</span></label>
+          <label class="opt"><input type="checkbox" name="faith" value="unsure"><span>Unsure</span></label>
+        </div>
+        <div class="textarea-block">
+          <label class="field-label" for="faith-notes">Specific reading, prayer or wording</label>
+          <textarea id="faith-notes" name="faith_notes" rows="3"></textarea>
+        </div>
+      </section>
+
+      <section class="card" id="s13">
+        <h2><span class="num">13</span> Entry, music and ending</h2>
+        <div class="opts grid two-col" data-checkbox-group="entry">
+          <label class="opt"><input type="checkbox" name="entry" value="one_first"><span>One partner enters first</span></label>
+          <label class="opt"><input type="checkbox" name="entry" value="both_separate"><span>Both enter separately</span></label>
+          <label class="opt"><input type="checkbox" name="entry" value="together"><span>Both enter together</span></label>
+          <label class="opt"><input type="checkbox" name="entry" value="walked_in"><span>Someone walks someone in</span></label>
+          <label class="opt"><input type="checkbox" name="entry" value="no_processional"><span>No formal processional</span></label>
+          <label class="opt"><input type="checkbox" name="entry" value="music_entry"><span>Music during entry</span></label>
+          <label class="opt"><input type="checkbox" name="entry" value="music_exit"><span>Music during exit</span></label>
+          <label class="opt"><input type="checkbox" name="entry" value="guests_standing"><span>Guests standing for entry</span></label>
+        </div>
+        <div class="textarea-block">
+          <label class="field-label" for="entry-notes">Entry plan and music choices</label>
+          <textarea id="entry-notes" name="entry_notes" rows="4"></textarea>
+        </div>
+      </section>
+
+      <section class="card" id="s14">
+        <h2><span class="num">14</span> Final words</h2>
+        <p class="subtitle" style="margin:-0.25rem 0 0.75rem;font-size:0.9rem;color:var(--muted)">Tick what you prefer for the closing (multiple ok).</p>
+        <div class="opts grid two-col" data-checkbox-group="final">
+          <label class="opt"><input type="checkbox" name="final" value="kiss_phrase_you_may_kiss"><span>“You may kiss”</span></label>
+          <label class="opt"><input type="checkbox" name="final" value="kiss_seal"><span>“You may seal this with a kiss”</span></label>
+          <label class="opt"><input type="checkbox" name="final" value="casual_close"><span>Something casual</span></label>
+          <label class="opt"><input type="checkbox" name="final" value="formal_close"><span>Something formal</span></label>
+          <label class="opt"><input type="checkbox" name="final" value="intro_husband_wife"><span>Introduce us as husband and wife</span></label>
+          <label class="opt"><input type="checkbox" name="final" value="intro_married_couple"><span>Introduce us as the married couple</span></label>
+          <label class="opt"><input type="checkbox" name="final" value="full_names"><span>Use our full names</span></label>
+          <label class="opt"><input type="checkbox" name="final" value="first_names"><span>Use our first names only</span></label>
+        </div>
+        <div class="textarea-block">
+          <label class="field-label" for="final-intro">Preferred final introduction</label>
+          <textarea id="final-intro" name="final_intro" rows="3"></textarea>
+        </div>
+      </section>
+
+      <section class="card" id="s15">
+        <h2><span class="num">15</span> Final checklist <span style="font-weight:400;color:var(--muted);font-size:0.85rem">(for your officiant)</span></h2>
+        <div class="opts" data-checkbox-group="checklist">
+          <label class="opt"><input type="checkbox" name="checklist" value="tone"><span>I know the tone they want</span></label>
+          <label class="opt"><input type="checkbox" name="checklist" value="include"><span>I know what to include</span></label>
+          <label class="opt"><input type="checkbox" name="checklist" value="avoid"><span>I know what to avoid</span></label>
+          <label class="opt"><input type="checkbox" name="checklist" value="legal_ref"><span>I know how to refer to the legal marriage</span></label>
+          <label class="opt"><input type="checkbox" name="checklist" value="story"><span>I have their story details</span></label>
+          <label class="opt"><input type="checkbox" name="checklist" value="vow_ring"><span>I know the vow/ring plan</span></label>
+          <label class="opt"><input type="checkbox" name="checklist" value="family_sens"><span>I know family sensitivities</span></label>
+          <label class="opt"><input type="checkbox" name="checklist" value="final_wording"><span>I know the final wording</span></label>
+        </div>
+        <div class="textarea-block">
+          <label class="field-label" for="extra-notes">Extra notes</label>
+          <textarea id="extra-notes" name="extra_notes" rows="4"></textarea>
+        </div>
+      </section>
+    </form>
+
+    <footer class="note">
+      Data stays in this browser via localStorage. Copy backup to paste into Notes or email. Clearing your browser data may remove saved answers.
+    </footer>
+  </div>
+
+  <script>
+(function () {
+  var STORAGE_KEY = 'marriageCeremonyQuestionnaire_v1';
+  var form = document.getElementById('q-form');
+  var statusEl = document.getElementById('save-status');
+  var saveTimer = null;
+
+  function gatherState() {
+    var data = {
+      text: {},
+      checks: {}
+    };
+    var inputs = form.querySelectorAll('input, textarea');
+    for (var i = 0; i < inputs.length; i++) {
+      var el = inputs[i];
+      var name = el.name;
+      if (!name) continue;
+      if (el.type === 'checkbox') {
+        if (!data.checks[name]) data.checks[name] = [];
+        if (el.checked) data.checks[name].push(el.value);
+      } else if (el.type === 'radio') {
+        if (el.checked) data.text[name] = el.value;
+      } else {
+        data.text[name] = el.value;
+      }
+    }
+    return data;
+  }
+
+  function applyState(data) {
+    if (!data || typeof data !== 'object') return;
+    var text = data.text || {};
+    var checks = data.checks || {};
+
+    var inputs = form.querySelectorAll('input, textarea');
+    for (var i = 0; i < inputs.length; i++) {
+      var el = inputs[i];
+      var name = el.name;
+      if (!name) continue;
+      if (el.type === 'checkbox') {
+        var list = checks[name] || [];
+        el.checked = list.indexOf(el.value) !== -1;
+      } else if (el.type === 'radio') {
+        el.checked = text[name] === el.value;
+      } else {
+        el.value = text[name] != null ? String(text[name]) : '';
+      }
+    }
+  }
+
+  function save(showFlash) {
+    try {
+      var json = JSON.stringify(gatherState());
+      localStorage.setItem(STORAGE_KEY, json);
+      if (showFlash !== false) {
+        statusEl.textContent = 'Saved to this device';
+        statusEl.classList.add('saved');
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(function () {
+          statusEl.textContent = '';
+          statusEl.classList.remove('saved');
+        }, 2200);
+      }
+    } catch (e) {
+      statusEl.textContent = 'Could not save (storage full or disabled)';
+      statusEl.classList.remove('saved');
+    }
+  }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) applyState(JSON.parse(raw));
+    } catch (e) {}
+  }
+
+  form.addEventListener('input', function () { save(true); });
+  form.addEventListener('change', function () { save(true); });
+
+  document.getElementById('btn-save-now').addEventListener('click', function () {
+    save(true);
+  });
+
+  document.getElementById('btn-export').addEventListener('click', function () {
+    save(false);
+    var payload = JSON.stringify(gatherState(), null, 2);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(payload).then(function () {
+        statusEl.textContent = 'Backup copied to clipboard';
+        statusEl.classList.add('saved');
+        setTimeout(function () {
+          statusEl.textContent = '';
+          statusEl.classList.remove('saved');
+        }, 2200);
+      }).catch(function () {
+        promptCopy(payload);
+      });
+    } else {
+      promptCopy(payload);
+    }
+  });
+
+  function promptCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      statusEl.textContent = 'Backup copied';
+      statusEl.classList.add('saved');
+    } catch (e) {
+      statusEl.textContent = 'Select and copy the JSON from the console';
+      console.log(text);
+    }
+    document.body.removeChild(ta);
+  }
+
+  document.getElementById('btn-clear').addEventListener('click', function () {
+    if (!confirm('Clear all answers from this form and this browser?')) return;
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {}
+    form.reset();
+    statusEl.textContent = 'Cleared';
+    statusEl.classList.remove('saved');
+  });
+
+  document.getElementById('section-jump').addEventListener('change', function () {
+    var id = this.value;
+    if (!id) return;
+    var el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    this.value = '';
+  });
+
+  load();
+})();
+  </script>
+</body>
+</html>
